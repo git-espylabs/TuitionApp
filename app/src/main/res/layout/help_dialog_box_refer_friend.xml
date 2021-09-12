@@ -1,0 +1,136 @@
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/refer_help_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:layout_marginLeft="16dp"
+            android:text="Refer a Friend"
+            android:textColor="@color/black_text"
+            android:textSize="18sp"
+            android:fontFamily="@font/poppins_medium"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1"
+            android:scaleType="fitEnd"
+            app:srcCompat="@drawable/ic_close" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <LinearLayout
+        android:id="@+id/helpboxLinear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="#fff"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <EditText
+            android:id="@+id/ref_edt_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/rect_bg_gray_border"
+            android:gravity="left"
+            android:hint="Name"
+            android:fontFamily="@font/poppins_regular"
+            android:inputType="text"
+            android:paddingLeft="16dp"
+            android:paddingTop="16dp"
+
+            android:paddingBottom="16dp"
+            android:textColor="@color/qury_clr"
+            android:textSize="14dp" />
+
+
+        <EditText
+            android:id="@+id/ref_edt_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/rect_bg_gray_border"
+            android:gravity="left"
+            android:hint="Email"
+            android:inputType="text"
+            android:fontFamily="@font/poppins_regular"
+            android:paddingLeft="16dp"
+            android:paddingTop="16dp"
+
+            android:paddingBottom="16dp"
+            android:textColor="@color/qury_clr"
+            android:textSize="14dp" />
+
+        <EditText
+            android:id="@+id/ref_edt_mob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/rect_bg_gray_border"
+            android:gravity="left"
+            android:hint="Mobile"
+            android:maxLength="10"
+            android:inputType="phone"
+            android:paddingLeft="16dp"
+            android:fontFamily="@font/poppins_regular"
+            android:paddingTop="16dp"
+
+            android:paddingBottom="16dp"
+            android:textColor="@color/qury_clr"
+            android:textSize="14dp" />
+
+
+        <TextView
+            android:id="@+id/refbtnquery_smt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/rect_bg_gradient_button"
+            android:gravity="center"
+            android:paddingStart="16dp"
+            android:paddingTop="15dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="15dp"
+            android:text="Submit"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="14dp"
+            android:fontFamily="@font/poppins_medium"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -1,0 +1,21 @@
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/overview_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:layout_margin="16dp"
+        android:text="When a chemist encounters a new reaction, it does not usually come with a label that shows the balanced chemical equation.Instead, the chemist must identify the reactants and products and then write them in the form of a chemical equation that may or may not be balanced as first written"
+        android:textColor="@color/heading_color"
+        android:textSize="14sp"
+        android:textStyle="normal"
+
+        />
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

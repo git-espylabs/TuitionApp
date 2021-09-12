@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="120dp"
+    android:layout_height="120dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="10dp"
+    app:contentPadding="5dp"
+    app:cardUseCompatPadding="true"
+    app:cardElevation="0dp"
+    android:layout_gravity="top">
+    <com.makeramen.roundedimageview.RoundedImageView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/subImg"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+    app:riv_corner_radius="10dip"
+    app:riv_border_width="1dip"
+    app:riv_border_color="@color/border_clr"
+    app:riv_mutate_background="true"
+    app:riv_tile_mode="repeat"
+    app:riv_oval="false"
+        tools:ignore="ContentDescription" />
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+
+        android:background="@drawable/ic_grid_curve"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/subName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="Malayalam"
+            android:textColor="#FFFFFF"
+            android:padding="5dp"
+            android:fontFamily="@font/poppins_medium"
+            android:textSize="14dp"
+            android:textStyle="normal" />
+
+    </LinearLayout>
+</RelativeLayout>
+</androidx.cardview.widget.CardView>

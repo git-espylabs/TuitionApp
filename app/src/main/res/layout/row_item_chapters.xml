@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="10dp"
+        android:padding="7dp"
+        android:background="@drawable/button_outline_grey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+<androidx.appcompat.widget.LinearLayoutCompat
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="2"
+    android:gravity="center|left"
+
+    >
+        <TextView
+            android:id="@+id/chapter"
+            android:gravity="center|left"
+            android:textColor="@color/chapter_clr"
+            android:textSize="14dp"
+            android:text="Chapter1"
+            android:layout_weight=".5"
+            android:layout_marginLeft="10dp"
+            android:layout_width="0dp"
+            android:fontFamily="@font/poppins_medium"
+            android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/vdo_img"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:scaleType="fitStart"
+        android:layout_weight=".1"
+        android:layout_marginLeft="15dp"
+        app:srcCompat="@drawable/ic_icon_video" />
+
+    <TextView
+        android:id="@+id/video_count"
+        android:gravity="center|left"
+        android:textColor="@color/chapter_clr"
+        android:textSize="14dp"
+        android:text="2 Videos"
+        android:layout_weight=".5"
+        android:fontFamily="@font/poppins_regular"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+</androidx.appcompat.widget.LinearLayoutCompat>
+
+        <TextView
+            android:id="@+id/chapter_desc"
+            android:gravity="center|left"
+            android:textColor="@color/black_text"
+            android:textSize="14dp"
+            android:text="Chemical reaction and equations"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="7dp"
+            android:fontFamily="@font/poppins_medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

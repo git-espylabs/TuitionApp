@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="7dp"
+    app:contentPadding="5dp"
+    android:layout_margin="5dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <FrameLayout
+                android:id="@+id/frame_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+            <ImageView
+                android:id="@+id/tutor_image"
+                android:layout_width="130dp"
+                android:layout_height="140dp"
+                android:layout_gravity="center"
+                android:scaleType="fitXY" />
+
+                <ImageView
+                    android:id="@+id/tutor_curve"
+                    android:layout_width="70dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="right|bottom"
+                    app:srcCompat="@drawable/ic_intersection"
+                    android:scaleType="fitXY" />
+
+                <ImageView
+                    android:id="@+id/tutor_play"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_gravity="right|bottom"
+                    app:srcCompat="@drawable/ic_icon_play_circle_outline"
+                    android:scaleType="fitXY" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_duration"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/heading_color"
+                    android:layout_gravity="left|bottom"
+                    android:text="12:36"
+                    android:paddingLeft="5dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:padding="3dp"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="12dp"
+                    android:drawableLeft="@drawable/ic_icon_feather_clock"
+
+                    />
+
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:orientation="vertical"
+                android:layout_marginLeft="5dp">
+
+                <TextView
+                    android:id="@+id/chap_title_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:layout_marginTop="5dp"
+                    android:textSize="12dp"
+                    android:maxLines="2"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textAllCaps="false"
+                    android:textColor="@color/main_title_list_clr"
+                    android:text="chapter1" />
+
+                <TextView
+                    android:id="@+id/main_head"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:textColor="@color/black_text"
+                    android:text="Chemical reactions" />
+                <TextView
+                    android:id="@+id/main_head_desc_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textColor="@color/main_title_list_clr"
+                    android:text="A chemical reaction is described" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
