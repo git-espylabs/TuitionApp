@@ -50,21 +50,26 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             //video view
-
-            <FrameLayout
+            <RelativeLayout
+                android:id="@+id/trim_container"
+                android:layout_width="match_parent"
+                android:layout_height="230dp" >
+            <!--<FrameLayout
                 android:id="@+id/video_layout"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="@android:color/black">
+                android:background="@android:color/black">-->
 
-                <VideoView
+                <com.aplus.edu.utils.ScalableVideoView
                     android:id="@+id/videovvv"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
+                    android:layout_gravity="top|center"
                     android:visibility="gone" />
 
 
-            </FrameLayout>
+           <!-- </FrameLayout>-->
+            </RelativeLayout>
 
             //tab views
 

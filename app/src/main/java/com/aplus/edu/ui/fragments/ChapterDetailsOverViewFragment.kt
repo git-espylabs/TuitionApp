@@ -270,6 +270,7 @@ class ChapterDetailsOverViewFragment : BaseFragment(), StudymaterialsAdapter.Sub
         videovvv.setVideoURI(video)
         videovvv.setOnPreparedListener { mp ->
             mp.isLooping = true
+            videovvv.setBackgroundColor(Color.TRANSPARENT);
             videovvv.start()
         }
         videovvv.visibility=View.VISIBLE
