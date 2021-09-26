@@ -3,6 +3,7 @@ package com.aplus.edu.ui.fragments
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -10,12 +11,14 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.lifecycleScope
@@ -28,12 +31,14 @@ import com.aplus.edu.api.manager.APIManager
 import com.aplus.edu.api.response.*
 import com.aplus.edu.api.services.TuitionApiService
 import com.aplus.edu.constants.AppConstants
+import com.aplus.edu.extensions.setSelectedMode
 import com.aplus.edu.preference.UserInfo
 import com.aplus.edu.ui.activities.BaseActivity.Companion.dismissProgress
 import com.aplus.edu.ui.activities.BaseActivity.Companion.showProgress
 import com.aplus.edu.ui.activities.Home
 import com.aplus.edu.utils.CommonUtils
 import com.aplus.edu.utils.MultiPartRequestHelper
+import com.aplus.edu.utils.ScalableVideoView
 import kotlinx.android.synthetic.main.activity_chapters_main_tabs_view.*
 import kotlinx.android.synthetic.main.login.*
 import kotlinx.coroutines.launch
@@ -44,10 +49,14 @@ import org.json.JSONObject
 import retrofit2.Response
 import java.io.File
 import java.io.IOException
+import android.util.DisplayMetrics
+
+
+
 
 
 class ChapterDetailsOverViewFragment : BaseFragment(), StudymaterialsAdapter.Subjectcommunicator,
-    FaqsAdapter.Faqcommunicator, ExampdfAdapter.Exampdfcommunicator {
+    FaqsAdapter.Faqcommunicator, ExampdfAdapter.Exampdfcommunicator, View.OnClickListener {
     var video_id = ""
     var videoTitle = ""
     var overviewtext=""
@@ -64,12 +73,53 @@ class ChapterDetailsOverViewFragment : BaseFragment(), StudymaterialsAdapter.Sub
     private var absolutePhotoPathe: String? = null
     private var photoFile: File? = null
     var queriesDialog: Dialog? = null
+    var selectedTab = 1
 
 
     var cameraLaucher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val data: Intent? = result.data
             setCameraPicToImageView()
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.activity_chapters_main_tabs_view, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        initiateViews()
+    }
+
+    override fun onClick(v: View?) {
+        when(v?.id){
+            R.id.back_imv ->{
+                requireActivity().onBackPressed();
+            }
+
+            R.id.askadoubtfaqs ->{
+                showaskqueriessDialog()
+            }
+
+            R.id.overview_tv ->{
+                selectTab(1)
+            }
+
+            R.id.studymaterials_tv ->{
+                selectTab(2)
+            }
+
+            R.id.faq_tv ->{
+                selectTab(3)
+            }
+
+            R.id.exam_tv ->{
+                selectTab(4)
+            }
         }
     }
 
@@ -88,122 +138,97 @@ class ChapterDetailsOverViewFragment : BaseFragment(), StudymaterialsAdapter.Sub
             }
 
         }
-        back_imv.setOnClickListener {
-            //startActivity(Intent(activity, Home::class.java))
-            requireActivity().onBackPressed();
-        }
 
-        askadoubtfaqs.setOnClickListener {
-            //show dialog fragment
-            //ask
-            showaskqueriessDialog()
-        }
+        back_imv.setOnClickListener(this)
+        askadoubtfaqs.setOnClickListener(this)
+        overview_tv.setOnClickListener(this)
+        studymaterials_tv.setOnClickListener(this)
+        faq_tv.setOnClickListener(this)
+        exam_tv.setOnClickListener(this)
 
-        ///tabs click listner
-        overview_tv .setBackgroundDrawable(resources.getDrawable(R.drawable.rect_bg_white_tabs_vw));
-        val typeface = ResourcesCompat.getFont(requireActivity(), R.font.poppins_regular)
-        val typeface1 = ResourcesCompat.getFont(requireActivity(), R.font.poppins_medium)
-        overview_tv.typeface = typeface1
-        overview_tv.setTextColor(resources.getColor(R.color.btn_clr1))
-        overview_tv.setOnClickListener {
-            overview_tv.typeface = typeface1
-            studymaterials_tv.typeface = typeface
-            faq_tv.typeface = typeface
-            overview_tv.setTextColor(resources.getColor(R.color.btn_clr1))
-            studymaterials_tv.setTextColor(resources.getColor(R.color.white))
-            faq_tv.setTextColor(resources.getColor(R.color.white))
-            /////
-            examsLinear.visibility=View.GONE
-            overvw_tv.text=overviewtext
-            over_linear.visibility=View.VISIBLE
-            study_materials_Linear.visibility=View.GONE
-            faqsLinear.visibility=View.GONE
-            askadoubtfaqs.visibility=View.VISIBLE
-
-            //
-            overview_tv .setBackgroundDrawable(resources.getDrawable(R.drawable.rect_bg_white_tabs_vw));
-            studymaterials_tv .setBackgroundDrawable(null)
-            faq_tv .setBackgroundDrawable(null);
-            exam_tv.setBackgroundDrawable(null);
-        }
-
-        studymaterials_tv.setOnClickListener {
-        //call api here
-
-            overview_tv.typeface = typeface
-            studymaterials_tv.typeface = typeface1
-            faq_tv.typeface = typeface
-
-            overview_tv.setTextColor(resources.getColor(R.color.white))
-            studymaterials_tv.setTextColor(resources.getColor(R.color.btn_clr1))
-            faq_tv.setTextColor(resources.getColor(R.color.white))
-            /////
-            examsLinear.visibility=View.GONE
-            over_linear.visibility=View.GONE
-            askadoubtfaqs.visibility=View.VISIBLE
-            study_materials_Linear.visibility=View.VISIBLE
-            faqsLinear.visibility=View.GONE
-            getstudymaterialslist(video_id)
-
-            overview_tv .setBackgroundDrawable(null);
-            studymaterials_tv .setBackgroundDrawable(resources.getDrawable(R.drawable.rect_bg_white_tabs_vw))
-            faq_tv .setBackgroundDrawable(null);
-            exam_tv.setBackgroundDrawable(null);
-
-        }
-
-        faq_tv.setOnClickListener {
-
-            overview_tv.typeface = typeface
-            studymaterials_tv.typeface = typeface
-            faq_tv.typeface = typeface1
-
-            overview_tv.setTextColor(resources.getColor(R.color.white))
-            studymaterials_tv.setTextColor(resources.getColor(R.color.white))
-            faq_tv.setTextColor(resources.getColor(R.color.btn_clr1))
-            /////
-            examsLinear.visibility=View.GONE
-            over_linear.visibility=View.GONE
-            study_materials_Linear.visibility=View.GONE
-            faqsLinear.visibility=View.VISIBLE
-            askadoubtfaqs.visibility=View.VISIBLE
-            getfaqslist(video_id)
-
-            overview_tv .setBackgroundDrawable(null);
-            studymaterials_tv .setBackgroundDrawable(null)
-            faq_tv .setBackgroundDrawable(resources.getDrawable(R.drawable.rect_bg_white_tabs_vw));
-            exam_tv.setBackgroundDrawable(null);
-
-        }
-        exam_tv.setOnClickListener {
-            overview_tv.typeface = typeface
-            studymaterials_tv.typeface = typeface
-            faq_tv.typeface = typeface
-            exam_tv.typeface = typeface1
-
-            askadoubtfaqs.visibility=View.VISIBLE
-
-            overview_tv.setTextColor(resources.getColor(R.color.white))
-            studymaterials_tv.setTextColor(resources.getColor(R.color.white))
-            faq_tv.setTextColor(resources.getColor(R.color.white))
-            exam_tv.setTextColor(resources.getColor(R.color.btn_clr1))
-
-            overview_tv .setBackgroundDrawable(null);
-            studymaterials_tv .setBackgroundDrawable(null)
-            faq_tv .setBackgroundDrawable(null);
-            exam_tv .setBackgroundDrawable(resources.getDrawable(R.drawable.rect_bg_white_tabs_vw));
-
-            examsLinear.visibility=View.VISIBLE
-            over_linear.visibility=View.GONE
-            study_materials_Linear.visibility=View.GONE
-            faqsLinear.visibility=View.GONE
-
-            getExamslist(chapter_Ids)
-        }
         askadoubtfaqs.visibility=View.VISIBLE
+
+        overview_tv.setSelectedMode(true)
         getChapterOverviewlist(video_id)
 
     }
+
+    private fun selectTab(tabNumber: Int){
+        when(tabNumber){
+            1 -> {
+                selectedTab = 1
+
+                over_linear.visibility=View.VISIBLE
+                overview_tv.setSelectedMode(true)
+
+                studymaterials_tv.setSelectedMode(false)
+                faq_tv.setSelectedMode(false)
+                exam_tv.setSelectedMode(false)
+
+                study_materials_Linear.visibility=View.GONE
+                faqsLinear.visibility=View.GONE
+                examsLinear.visibility=View.GONE
+                askadoubtfaqs.visibility=View.VISIBLE
+            }
+
+            2 ->{
+                selectedTab = 2
+
+                getstudymaterialslist(video_id)
+
+                study_materials_Linear.visibility=View.VISIBLE
+                studymaterials_tv.setSelectedMode(true)
+
+                overview_tv.setSelectedMode(false)
+                faq_tv.setSelectedMode(false)
+                exam_tv.setSelectedMode(false)
+
+                over_linear.visibility=View.GONE
+                faqsLinear.visibility=View.GONE
+                examsLinear.visibility=View.GONE
+                askadoubtfaqs.visibility=View.VISIBLE
+            }
+
+            3 ->{
+                selectedTab = 3
+
+                getfaqslist(video_id)
+
+                faqsLinear.visibility=View.VISIBLE
+                faq_tv.setSelectedMode(true)
+
+                overview_tv.setSelectedMode(false)
+                studymaterials_tv.setSelectedMode(false)
+                exam_tv.setSelectedMode(false)
+
+                over_linear.visibility=View.GONE
+                study_materials_Linear.visibility=View.GONE
+                examsLinear.visibility=View.GONE
+                askadoubtfaqs.visibility=View.VISIBLE
+            }
+
+            4 ->{
+                selectedTab = 4
+
+                getExamslist(chapter_Ids)
+
+                examsLinear.visibility=View.VISIBLE
+                exam_tv.setSelectedMode(true)
+
+                overview_tv.setSelectedMode(false)
+                studymaterials_tv.setSelectedMode(false)
+                faq_tv.setSelectedMode(false)
+
+
+                over_linear.visibility=View.GONE
+                study_materials_Linear.visibility=View.GONE
+                faqsLinear.visibility=View.GONE
+                askadoubtfaqs.visibility=View.VISIBLE
+            }
+        }
+    }
+
+    /* Chapter Overview*/
 
     private fun getChapterOverviewlist(video_id: String) {
         lifecycleScope.launch {
@@ -226,21 +251,7 @@ class ChapterDetailsOverViewFragment : BaseFragment(), StudymaterialsAdapter.Sub
                 dismissProgress()
             }
             dismissProgress()
-
-
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.activity_chapters_main_tabs_view, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initiateViews()
     }
 
     private fun chapteroverviewJsonRequest(chapter_Id: String): RequestBody {
@@ -268,22 +279,21 @@ class ChapterDetailsOverViewFragment : BaseFragment(), StudymaterialsAdapter.Sub
         mc.setMediaPlayer(videovvv)
         videovvv.setMediaController(mc)
         videovvv.setVideoURI(video)
+        videovvv.setDisplayMode(ScalableVideoView.DisplayMode.FULL_SCREEN)
         videovvv.setOnPreparedListener { mp ->
             mp.isLooping = true
             videovvv.setBackgroundColor(Color.TRANSPARENT);
             videovvv.start()
         }
         videovvv.visibility=View.VISIBLE
-        ///
 
-        ////
         overvw_tv.text=overviewitems.overView
         overviewtext= overviewitems.overView!!
 
     }
 
-    //////////////////////////////////////////////////////////////tabs api code here
 
+    /* Study Materials*/
     private fun getstudymaterialslist(video_Id: String) {
         lifecycleScope.launch {
             showProgress(activity, "Fetching data..")
@@ -305,11 +315,8 @@ class ChapterDetailsOverViewFragment : BaseFragment(), StudymaterialsAdapter.Sub
                 dismissProgress()
             }
             dismissProgress()
-
-
         }
     }
-
 
     private fun studymaterialsJsonRequest(video_Id: String): RequestBody {
 
@@ -351,8 +358,8 @@ class ChapterDetailsOverViewFragment : BaseFragment(), StudymaterialsAdapter.Sub
 
     }
 
-    ////faqs///////////////////////////////////////////////////////
 
+    /* FAQs*/
     private fun getfaqslist(video_Id: String) {
         lifecycleScope.launch {
             showProgress(activity, "Fetching data..")
@@ -374,11 +381,8 @@ class ChapterDetailsOverViewFragment : BaseFragment(), StudymaterialsAdapter.Sub
                 dismissProgress()
             }
             dismissProgress()
-
-
         }
     }
-
 
     private fun faqsJsonRequest(video_Id: String): RequestBody {
 
@@ -407,7 +411,69 @@ class ChapterDetailsOverViewFragment : BaseFragment(), StudymaterialsAdapter.Sub
         TODO("Not yet implemented")
     }
 
-    ////////queries
+
+    /* Exams*/
+    private fun getExamslist(chapter_Id: String) {
+        lifecycleScope.launch {
+            showProgress(activity, "Fetching data..")
+            try {
+                val response = APIManager.call<TuitionApiService, Response<ExampdfResp>> {
+                    exampdf(examsJsonRequest(chapter_Id))
+                }
+                if (response != null) {
+                    examsItemList = (response.body()?.data as ArrayList<ExmPdfDataItem>?)!!
+                    if (examsItemList.size>0) {
+                        setexamsData(
+                            examsItemList
+
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            dismissProgress()
+        }
+    }
+
+    private fun examsJsonRequest(chapter_Id: String): RequestBody {
+
+        var jsonData = ""
+        var json: JSONObject? = null
+        try {
+            json = JSONObject()
+            json.put("lessonid", chapter_Id)
+            jsonData = json.toString()
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+        return jsonData.toRequestBody()
+    }
+
+    private fun setexamsData(exmsItemList: ArrayList<ExmPdfDataItem>)
+    {
+        exampdfAdapter = ExampdfAdapter(requireActivity(),exmsItemList, this)
+        val layoutManager = LinearLayoutManager(activity)
+        exams_recycler_view.layoutManager = layoutManager
+        exams_recycler_view.adapter = exampdfAdapter
+
+    }
+
+    override fun onRowClick(data: ExmPdfDataItem) {
+        if(data!=null)
+        {
+            try {
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(AppConstants.VIDEO_URL+data.pdf))
+                startActivity(browserIntent)
+            }
+            catch (e:java.lang.Exception)
+            {
+
+            }
+
+        }
+    }
+
 
     //askqueries
     private fun showaskqueriessDialog() {
@@ -448,7 +514,6 @@ class ChapterDetailsOverViewFragment : BaseFragment(), StudymaterialsAdapter.Sub
         }
 
     }
-
 
     private fun dispatchTakePictureIntent() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
@@ -568,69 +633,46 @@ class ChapterDetailsOverViewFragment : BaseFragment(), StudymaterialsAdapter.Sub
         return jsonData.toRequestBody()
     }
 
-    //exams
-
-    private fun getExamslist(chapter_Id: String) {
-        lifecycleScope.launch {
-            showProgress(activity, "Fetching data..")
-            try {
-                val response = APIManager.call<TuitionApiService, Response<ExampdfResp>> {
-                    exampdf(examsJsonRequest(chapter_Id))
-                }
-                if (response != null) {
-                    examsItemList = (response.body()?.data as ArrayList<ExmPdfDataItem>?)!!
-                    if (examsItemList.size>0) {
-                        setexamsData(
-                            examsItemList
-
-                        )
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                dismissProgress()
-            }
-            dismissProgress()
-
-
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
+            setLandscapeMode()
+        }else{
+            setPortraitMode()
         }
     }
 
-    private fun examsJsonRequest(chapter_Id: String): RequestBody {
+    private fun setLandscapeMode(){
+        headerLay.visibility = View.GONE
+        subHeaderLay.visibility = View.GONE
+        askadoubtfaqs.visibility=View.GONE
+        over_linear.visibility=View.GONE
+        study_materials_Linear.visibility=View.GONE
+        faqsLinear.visibility=View.GONE
+        examsLinear.visibility=View.GONE
 
-        var jsonData = ""
-        var json: JSONObject? = null
-        try {
-            json = JSONObject()
-            json.put("lessonid", chapter_Id)
-            jsonData = json.toString()
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
-        return jsonData.toRequestBody()
+        val displayMetrics = resources.displayMetrics
+        val height = displayMetrics.heightPixels
+        val width = displayMetrics.widthPixels
+
+        val params: ViewGroup.LayoutParams = videovvv.layoutParams
+        params.height = height
+        videovvv.layoutParams = params
     }
 
-    private fun setexamsData(exmsItemList: ArrayList<ExmPdfDataItem>)
-    {
-        exampdfAdapter = ExampdfAdapter(requireActivity(),exmsItemList, this)
-        val layoutManager = LinearLayoutManager(activity)
-        exams_recycler_view.layoutManager = layoutManager
-        exams_recycler_view.adapter = exampdfAdapter
+    private fun setPortraitMode(){
+        headerLay.visibility = View.VISIBLE
+        subHeaderLay.visibility = View.VISIBLE
+        askadoubtfaqs.visibility=View.VISIBLE
 
+        selectTab(selectedTab)
+
+        val scale = resources.displayMetrics.density
+        val height = (230 * scale + 0.5f).toInt()
+
+        val params: ViewGroup.LayoutParams = videovvv.layoutParams
+        params.height = height
+        videovvv.layoutParams = params
     }
 
-    override fun onRowClick(data: ExmPdfDataItem) {
-        if(data!=null)
-        {
-            try {
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(AppConstants.VIDEO_URL+data.pdf))
-                startActivity(browserIntent)
-            }
-            catch (e:java.lang.Exception)
-            {
-
-            }
-
-        }
-    }
 }

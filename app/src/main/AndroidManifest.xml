@@ -42,7 +42,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
             />
-<activity android:name=".ui.activities.Home" android:screenOrientation="portrait"
+<activity android:name=".ui.activities.Home" android:configChanges="keyboardHidden|orientation|screenSize"
     android:theme="@style/AppTheme.NoActionBar"
 
     />

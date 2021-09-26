@@ -1,4 +1,5 @@
 package com.aplus.edu.ui.activities
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -96,5 +97,9 @@ class Home : BaseActivity() {
             FragmentConstants.TERMS_FRAGMENT, bundle, true
         )
 
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
     }
 }
